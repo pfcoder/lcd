@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "lcd",
-    "version": "0.0.0"
+    "version": "0.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -15,13 +15,16 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "fs":{
+        "all": true
       }
     },
     "windows": [
       {
         "title": "lcd",
-        "width": 800,
-        "height": 600
+        "width": 1200,
+        "height": 800
       }
     ],
     "security": {
@@ -37,6 +40,9 @@
         "icons/128x128@2x.png",
         "icons/icon.icns",
         "icons/icon.ico"
+      ],
+      "resources": [
+        "log4rs.yaml"
       ]
     }
   }

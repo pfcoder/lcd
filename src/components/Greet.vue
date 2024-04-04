@@ -13,8 +13,8 @@ async function greet() {
 
 <template>
   <form class="row" @submit.prevent="greet">
-    <input id="greet-input" v-model="name" placeholder="Enter a name..." />
-    <button type="submit">Greet</button>
+    <input id="greet-input" v-model="name" placeholder="输入机器IP..." />
+    <button type="submit">查询</button>
   </form>
 
   <p>{{ greetMsg }}</p>
