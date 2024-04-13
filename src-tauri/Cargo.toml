@@ -11,10 +11,14 @@ edition = "2021"
 tauri-build = { version = "1", features = [] }
 
 [dependencies]
-tauri = { version = "1", features = [ "fs-all", "shell-open"] }
+lazy_static = "1.4"
+log = "0.4.14"
+log4rs = "1.0"
+miner-core = { version = "*", path = "../../miners" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-miners = { version = "*", path = "../../miners" }
+tauri = { version = "1", features = [ "fs-all", "shell-open"] }
+tokio = { version = "1", features = ["full"] }
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
