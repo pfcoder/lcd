@@ -142,6 +142,7 @@
             </div>
           </div>
         </div>
+        
       </div>
     </div>
     <div class="machine-table">
@@ -665,6 +666,16 @@
             align-items: center;
             margin-top: 10px;
           }
+        }
+      }
+      .graphic_area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .img {
+          width: 300px;
+          height: 100px;
         }
       }
     }
