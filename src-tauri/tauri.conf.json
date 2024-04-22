@@ -3,29 +3,40 @@
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
     "devPath": "http://localhost:1420",
-    "distDir": "../dist"
+    "distDir": "../dist",
+    "withGlobalTauri": false
   },
   "package": {
     "productName": "lcd",
-    "version": "0.0.1"
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
-      "all": false,
+      "all": true,
+      "http": {
+        "scope": ["http://**", "https://**"]
+      },
       "shell": {
         "all": false,
         "open": true
       },
       "fs":{
         "all": true
+      },
+      "window": {
+        "all": true
       }
     },
     "windows": [
       {
-        "title": "lcd",
-        "width": 1200,
-        "height": 800
-      }
+        "label": "custom",
+        "fullscreen": false,
+        "resizable": true,
+        "title": "Liquid Tools @BTC",
+        "width": 900,
+        "height": 500,
+        "decorations": false
+    }
     ],
     "security": {
       "csp": null
@@ -42,7 +53,6 @@
         "icons/icon.ico"
       ],
       "resources": [
-        "log4rs.yaml"
       ]
     }
   }

@@ -7,7 +7,11 @@ use log4rs::{
     config::{Appender, Config, Root},
     encode::pattern::PatternEncoder,
 };
-use miner_core::{error::MinerError, init, miner::entry::Machine, scan, MinersLibConfig};
+use miner_core::{
+    config, init,
+    miner::entry::{MachineInfo, PoolConfig},
+    reboot, scan, watching, MinersLibConfig,
+};
 use std::fs;
 use tokio::runtime::Runtime;
 
@@ -24,8 +28,23 @@ lazy_static! {
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-async fn scan_machines(ip: String) -> Result<Vec<Machine>, String> {
-    scan(RUNTIME.handle().clone(), &ip).await
+async fn scan_machines(ip: String, offset: i32, count: i32) -> Result<Vec<MachineInfo>, String> {
+    scan(RUNTIME.handle().clone(), &ip, offset, count).await
+}
+
+#[tauri::command]
+async fn reboot_machines(ips: Vec<String>) -> Result<(), String> {
+    reboot(RUNTIME.handle().clone(), ips).await
+}
+
+#[tauri::command]
+async fn config_machines(ips: Vec<String>, account: Vec<PoolConfig>) -> Result<i64, String> {
+    config(RUNTIME.handle().clone(), ips, account).await
+}
+
+#[tauri::command]
+async fn watch_machines(ips: Vec<String>) -> Result<Vec<MachineInfo>, String> {
+    watching(RUNTIME.handle().clone(), ips).await
 }
 
 fn init_log(app_path: &str) {
@@ -80,7 +99,12 @@ fn main() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![scan_machines])
+        .invoke_handler(tauri::generate_handler![
+            scan_machines,
+            reboot_machines,
+            config_machines,
+            watch_machines
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
