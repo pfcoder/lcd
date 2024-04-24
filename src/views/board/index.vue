@@ -149,6 +149,7 @@
       <el-table 
         ref="multipleTableRef" 
         @selection-change="handleSelectionChange" 
+        @cell-click="handleCellClick"
         class="table-content" :height="800" 
         border 
         @row-click="handleRowClick"
@@ -159,10 +160,10 @@
         <el-table-column prop="status" width="80" label="状态"  align="center">
           <template #default="{ row }">
             <template v-if="row.status === '在线'">
-              <div style="color: green">在线</div>
+              <div style="color: green">{{ $t('machine.status.online') }}</div>
             </template>
             <template v-else>
-              <div style="color: red">离线</div>
+              <div style="color: red">{{ $t('machine.status.offline') }}</div>
             </template>
           </template>  
         </el-table-column>
@@ -196,7 +197,8 @@
   import { ref, reactive, onMounted, computed} from "vue";
   import { invoke } from "@tauri-apps/api/tauri";
   import { ElTable, ElMessage } from 'element-plus';
-  import { Setting, Clock, Search, SwitchButton, Refresh } from '@element-plus/icons-vue'
+  import { Setting, Clock, Search, SwitchButton, Refresh } from '@element-plus/icons-vue';
+  import { open } from '@tauri-apps/api/shell';
 
   const IP_HIS_KEY: string = 'lcd-ip-history';
   const MACHINES_KEY: string = 'lcd-machines';
@@ -417,6 +419,13 @@
     is_refreshing.value = true;
     await watch_machines();
     is_refreshing.value = false;
+  }
+
+  function handleCellClick(row: MachineInfo, column: any, _cell: any, _event: any) {
+    console.log("cell click:", row, column);
+    if (column.property === 'ip' && row.ip) {
+      open(`http://${row.ip}`);
+    }
   }
 
   function watch_machine() {

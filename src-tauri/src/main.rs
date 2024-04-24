@@ -1,16 +1,16 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use lcd_core::{
+    config, init,
+    miner::entry::{MachineInfo, PoolConfig},
+    reboot, scan, watching, MinersLibConfig,
+};
 use log::LevelFilter;
 use log4rs::{
     append::{console::ConsoleAppender, file::FileAppender},
     config::{Appender, Config, Root},
     encode::pattern::PatternEncoder,
-};
-use miner_core::{
-    config, init,
-    miner::entry::{MachineInfo, PoolConfig},
-    reboot, scan, watching, MinersLibConfig,
 };
 use std::fs;
 use tokio::runtime::Runtime;
@@ -95,6 +95,7 @@ fn main() {
                 app_path: app_data_path.to_str().unwrap().to_owned(),
                 feishu_app_id: "".to_owned(),
                 feishu_app_secret: "".to_owned(),
+                feishu_bot: "".to_owned(),
             });
 
             Ok(())

@@ -951,19 +951,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "digest_auth"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3054f4e81d395e50822796c5e99ca522e6ba7be98947d6d4b0e5e61640bdb894"
-dependencies = [
- "digest",
- "hex",
- "md-5",
- "rand 0.8.5",
- "sha2",
-]
-
-[[package]]
 name = "dirs-next"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2248,15 +2235,39 @@ name = "lcd"
 version = "1.0.0"
 dependencies = [
  "lazy_static",
+ "lcd-core",
  "log",
  "log4rs",
- "miner-core",
  "serde",
  "serde_json",
  "tauri",
  "tauri-build",
  "tokio",
  "window-shadows",
+]
+
+[[package]]
+name = "lcd-core"
+version = "0.1.0"
+source = "git+https://github.com/pfcoder/lcd-core.git?branch=main#36da405513ebca6e5d3e32a53b4d6d5958700b27"
+dependencies = [
+ "chrono",
+ "curl",
+ "env_logger",
+ "futures",
+ "http 0.2.12",
+ "lazy_static",
+ "log",
+ "log4rs",
+ "rand 0.7.3",
+ "regex",
+ "reqwest 0.12.3",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "serde_urlencoded",
+ "thiserror",
+ "tokio",
 ]
 
 [[package]]
@@ -2447,16 +2458,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2532096657941c2fea9c289d370a250971c689d4f143798ff67113ec042024a5"
 
 [[package]]
-name = "md-5"
-version = "0.10.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d89e7ee0cfbedfc4da3340218492196241d89eefb6dab27de5df917a6d2e78cf"
-dependencies = [
- "cfg-if",
- "digest",
-]
-
-[[package]]
 name = "memchr"
 version = "2.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2485,30 +2486,6 @@ name = "mime"
 version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6877bb514081ee2a7ff5ef9de3281f14a4dd4bceac4c09388074a6b5df8a139a"
-
-[[package]]
-name = "miner-core"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "curl",
- "digest_auth",
- "env_logger",
- "futures",
- "http 1.1.0",
- "lazy_static",
- "log",
- "log4rs",
- "rand 0.8.5",
- "regex",
- "reqwest 0.12.3",
- "rusqlite",
- "serde",
- "serde_json",
- "serde_urlencoded",
- "thiserror",
- "tokio",
-]
 
 [[package]]
 name = "minimal-lexical"
