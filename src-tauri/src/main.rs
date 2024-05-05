@@ -3,8 +3,8 @@
 
 use lcd_core::{
     config, init,
-    miner::entry::{MachineInfo, PoolConfig},
-    reboot, scan, watching, MinersLibConfig,
+    miner::entry::{MachineInfo, MachineRecord, PoolConfig},
+    query_machine_records_by_time, reboot, scan, watching, MinersLibConfig,
 };
 use log::LevelFilter;
 use log4rs::{
@@ -20,7 +20,7 @@ extern crate lazy_static;
 
 lazy_static! {
     static ref RUNTIME: Runtime = tokio::runtime::Builder::new_multi_thread()
-        .worker_threads(20) // 设置工作线程的数量
+        .worker_threads(50) // 设置工作线程的数量
         .enable_all()
         .build()
         .unwrap();
@@ -28,8 +28,13 @@ lazy_static! {
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-async fn scan_machines(ip: String, offset: i32, count: i32) -> Result<Vec<MachineInfo>, String> {
-    scan(RUNTIME.handle().clone(), &ip, offset, count).await
+async fn scan_machines(
+    ip: String,
+    offset: i32,
+    count: i32,
+    timeout: i64,
+) -> Result<Vec<MachineInfo>, String> {
+    scan(RUNTIME.handle().clone(), &ip, offset, count, timeout).await
 }
 
 #[tauri::command]
@@ -43,8 +48,13 @@ async fn config_machines(ips: Vec<String>, account: Vec<PoolConfig>) -> Result<i
 }
 
 #[tauri::command]
-async fn watch_machines(ips: Vec<String>) -> Result<Vec<MachineInfo>, String> {
-    watching(RUNTIME.handle().clone(), ips).await
+async fn watch_machines(ips: Vec<String>, timeout: i64) -> Result<Vec<MachineInfo>, String> {
+    watching(RUNTIME.handle().clone(), ips, timeout).await
+}
+
+#[tauri::command]
+fn query_ip_records(ip: String, start: i64, end: i64) -> Result<Vec<MachineRecord>, String> {
+    query_machine_records_by_time(ip, start, end)
 }
 
 fn init_log(app_path: &str) {
@@ -91,11 +101,12 @@ fn main() {
             }
             init_log(app_data_path.to_str().unwrap());
             init(&MinersLibConfig {
-                is_need_db: false,
+                is_need_db: true,
                 app_path: app_data_path.to_str().unwrap().to_owned(),
                 feishu_app_id: "".to_owned(),
                 feishu_app_secret: "".to_owned(),
                 feishu_bot: "".to_owned(),
+                db_keep_days: 20,
             });
 
             Ok(())
@@ -104,7 +115,8 @@ fn main() {
             scan_machines,
             reboot_machines,
             config_machines,
-            watch_machines
+            watch_machines,
+            query_ip_records,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

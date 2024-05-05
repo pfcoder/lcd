@@ -7,9 +7,9 @@ const messages = {
     en,
     zh,
 }
-const language = (navigator.language || 'en').toLocaleLowerCase() // 这是获取浏览器的语言
+//const language = (navigator.language || 'en').toLocaleLowerCase() // 这是获取浏览器的语言
 const i18n = createI18n({
-    locale: localStorage.getItem('lang') || 'zh', // 首先从缓存里拿，没有的话就用浏览器语言，
+    locale: localStorage.getItem('lcd-lang') || 'zh', // 首先从缓存里拿，没有的话就用浏览器语言，
     fallbackLocale: 'zh', // 设置备用语言
     messages,
     legacy: false,

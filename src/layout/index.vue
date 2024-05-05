@@ -2,7 +2,8 @@
   <div class="layout-main">
     <div class="layout-header" data-tauri-drag-region>
       <div class="logo">
-        <img :src="Logo" class="logo-img" data-tauri-drag-region />
+        <!-- <img :src="Logo" class="logo-img" data-tauri-drag-region /> -->
+        <span class="app-name">Liquid Cooler Desktop</span>
         <span class="ver">v1.0.0</span>
       </div>
       <div class="header-action">
@@ -56,10 +57,19 @@ onMounted(() => {
       width: 130px;
       height: 46px;
     }
+
     .ver {
       font-weight: 700;
-      font-size: 12px;
+      font-size: 14px;
+      color: rgb(134, 184, 237);
+    }
+
+    .app-name {
+      font-weight: 700;
+      font-size: 14px;
       color: rgb(38, 117, 200);
+      margin-left: 10px;
+      margin-right: 10px;
     }
   }
 
