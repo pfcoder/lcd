@@ -1,1 +1,1 @@
-# Liquid Cooler Desktop (LCD)  
+# Liquid Cooler Desktop  (LCD)  
