@@ -1,6 +1,6 @@
 [package]
 name = "lcd"
-version = "1.0.0"
+version = "1.0.1"
 description = "Liquid Tools @BTC"
 authors = ["codegene"]
 edition = "2021"
@@ -18,7 +18,7 @@ log4rs = "1.0"
 lcd-core = { path = "../../lcd-core" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-tauri = { version = "1", features = [ "api-all"] }
+tauri = { version = "1", features = ["api-all"] }
 tokio = { version = "1", features = ["full"] }
 window-shadows = "0.2.1"
 
