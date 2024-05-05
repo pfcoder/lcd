@@ -2249,17 +2249,18 @@ dependencies = [
 [[package]]
 name = "lcd-core"
 version = "0.1.0"
+source = "git+https://github.com/pfcoder/lcd-core.git?branch=main#0fde2188b4acbe063a9b23c1a914e8a32a81fbcf"
 dependencies = [
  "chrono",
  "curl",
  "env_logger",
  "futures",
- "http 1.1.0",
+ "http 0.2.12",
  "lazy_static",
  "log",
  "log4rs",
  "ping-rs",
- "rand 0.8.5",
+ "rand 0.7.3",
  "regex",
  "reqwest 0.12.3",
  "rusqlite",
