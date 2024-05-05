@@ -24,18 +24,7 @@ const routes: Array<RouteRecordRaw> = [
                     icon: 'FolderOpened',
                 },
                 component: () => import('@/views/board/index.vue'),
-            },
-            {
-                path: 'help',
-                name: 'help',
-                component: () => import('@/views/help/index.vue'),
-                meta: {
-                    requiresAuth: false,
-                    show: true,
-                    title: '帮助反馈',
-                    icon: 'Service',
-                },
-            },
+            }
         ],
     },
 ]
