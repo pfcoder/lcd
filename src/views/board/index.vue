@@ -229,7 +229,7 @@
                 }}</el-button>
               <el-button class="button" type="text" size="small" @click="handleSingleReboot(row)">{{
                 $t('operation.reboot')
-              }}</el-button>
+                }}</el-button>
             </div>
           </template>
         </el-table-column>
@@ -534,9 +534,6 @@ function show_reboot_selection() {
   rebootMultipleDialogVisible.value = true;
 }
 
-function show_settings() {
-
-}
 
 function get_pool_config() {
   let pools: PoolConfig[] = [];
