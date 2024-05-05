@@ -33,7 +33,6 @@
 <script setup lang='ts'>
 import { onMounted } from 'vue';
 import { appWindow } from '@tauri-apps/api/window'
-import Logo from "@/assets/images/logo.png"
 
 onMounted(() => {
   document.getElementById('titlebar-minimize')!.addEventListener('click', () => appWindow.minimize())
