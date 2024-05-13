@@ -4,6 +4,8 @@ export interface MachineInfo {
     machine_type: string;
     hash_real: string;
     hash_avg: string;
+    pool_hash_real: string;
+    pool_hash_avg: string;
     temp: string;
     mode: string;
     elapsed: string;

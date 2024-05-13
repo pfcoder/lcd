@@ -7,6 +7,8 @@ export default {
     type: '类型',
     hashReal: '实时算力',
     hashAvg: '平均算力',
+    poolHashReal: '矿池REAL',
+    poolHashAvg: '矿池AVG',
     temp: '温度',
     mode: '模式',
     updateTime: '更新时间',
@@ -65,4 +67,5 @@ export default {
     accountPassword: '账户密码',
     connectTimeoutSetting: '扫描超时设置',
     scanning: '扫描中',
+    watcherUrl: '矿池观察者链接',
 }

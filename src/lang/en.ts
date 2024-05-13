@@ -7,6 +7,8 @@ export default {
     type: 'Type',
     hashReal: 'RealHash',
     hashAvg: 'AvgHash',
+    poolHashReal: 'PoolRealHash',
+    poolHashAvg: 'PoolAvgHash',
     temp: 'Temp',
     mode: 'Mode',
     updateTime: 'Update',
@@ -65,4 +67,5 @@ export default {
     accountPassword: 'Account Password',
     connectTimeoutSetting: 'Scan Timeout Setting',
     scanning: 'Scanning',
+    watcherUrl: 'Pool Watcher Url',
 }

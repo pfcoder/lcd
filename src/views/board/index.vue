@@ -74,6 +74,15 @@
           <el-form-item :label="$t('connectTimeoutSetting')">
             <el-slider v-model="scanTimeout" :format-tooltip="formatScanTimeoutTooltip" :max="10" :min="2" />
           </el-form-item>
+          <el-form-item :label="$t('watcherUrl')">
+            <el-input
+              v-model="settingForm.watcherUrl"
+              style="width: 300px"
+              :rows="2"
+              type="textarea"
+            />
+          </el-form-item>
+
           <el-form-item :label="$t('language')">
             <el-select v-model="settingForm.language" :placeholder="$t('plsSelectLanguage')">
               <el-option label="中文" value="zh" />
@@ -191,6 +200,11 @@
           :sort-method="methods.hash_sort" :label="$t('hashReal')" align="center"></el-table-column>
         <el-table-column class="table-column" prop="hash_avg" width="120" show-overflow-tooltip sortable
           :sort-method="methods.hash_sort" :label="$t('hashAvg')" align="center"></el-table-column>
+        <el-table-column class="table-column" prop="pool_hash_real" width="120" show-overflow-tooltip sortable
+          :sort-method="methods.hash_sort" :label="$t('poolHashReal')" align="center">
+        </el-table-column>
+        <el-table-column class="table-column" prop="pool_hash_avg" width="120" show-overflow-tooltip sortable
+          :sort-method="methods.hash_sort" :label="$t('poolHashAvg')" align="center"></el-table-column>
         <el-table-column class="table-column" prop="temp" width="120" show-overflow-tooltip :label="$t('temp')"
           align="center"></el-table-column>
         <el-table-column class="table-column" prop="mode" width="90" show-overflow-tooltip :label="$t('mode')"
@@ -263,6 +277,7 @@ const CONFIG_WATCHING_KEY: string = 'lcd-watching';
 const CONFIG_REFRESH_KEY: string = 'lcd-refresh';
 const CONFIG_LANG_KEY: string = 'lcd-lang';
 const CONFIG_SCAN_TIMEOUT_KEY: string = 'lcd-scan-timeout';
+const CONFIG_WATCH_URL_KEY: string = 'lcd-watch-url';
 
 
 interface PoolConfig {
@@ -320,6 +335,7 @@ const scanTimeout = ref<number>(3);
 let settingForm = reactive({
   refreshInterval: localStorage.getItem(CONFIG_REFRESH_KEY) || "3",
   language: localStorage.getItem(CONFIG_LANG_KEY) || "zh",
+  watcherUrl: "",
 })
 
 const handleSelectionChange = (val: MachineInfo[]) => {
@@ -394,6 +410,12 @@ onMounted(() => {
   is_watching.value = localStorage.getItem(CONFIG_WATCHING_KEY) === '1';
   if (is_watching.value) {
     watch_machine();
+  }
+
+  let watch_url = localStorage.getItem(CONFIG_WATCH_URL_KEY);
+  if (watch_url !== null && watch_url.length > 0) {
+    settingForm.watcherUrl = watch_url;
+    invoke("schedule_pool_record_update", { url: settingForm.watcherUrl })
   }
 });
 
@@ -640,7 +662,7 @@ async function queryMachineRecords(row: MachineInfo) {
   isMachineRecordsLoading.value = false;
 }
 
-function onSettingsConfirm() {
+async function onSettingsConfirm() {
   console.log("onSettingsConfirm:", settingForm);
   // update store
   // get old settings compare
@@ -661,6 +683,11 @@ function onSettingsConfirm() {
 
   if (localStorage.getItem(CONFIG_SCAN_TIMEOUT_KEY) !== scanTimeout.value.toString()) {
     localStorage.setItem(CONFIG_SCAN_TIMEOUT_KEY, scanTimeout.value.toString());
+  }
+
+  if (localStorage.getItem(CONFIG_WATCH_URL_KEY) !== settingForm.watcherUrl) {
+    localStorage.setItem(CONFIG_WATCH_URL_KEY, settingForm.watcherUrl);
+    await invoke("schedule_pool_record_update", { url: settingForm.watcherUrl })
   }
 
   settingDrawer.value = false;

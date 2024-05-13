@@ -4,7 +4,8 @@
 use lcd_core::{
     config, init,
     miner::entry::{MachineInfo, MachineRecord, PoolConfig},
-    query_machine_records_by_time, reboot, scan, watching, MinersLibConfig,
+    query_machine_records_by_time, reboot, scan, start_pool_record_update_task, watching,
+    MinersLibConfig,
 };
 use log::LevelFilter;
 use log4rs::{
@@ -13,7 +14,7 @@ use log4rs::{
     encode::pattern::PatternEncoder,
 };
 use std::fs;
-use tokio::runtime::Runtime;
+use tokio::{runtime::Runtime, sync::Mutex, task::JoinHandle};
 
 #[macro_use]
 extern crate lazy_static;
@@ -24,6 +25,9 @@ lazy_static! {
         .enable_all()
         .build()
         .unwrap();
+
+    // store JoinHandle
+    static ref HANDLES: Mutex<Vec<JoinHandle<()>>> = Mutex::new(Vec::new());
 }
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -55,6 +59,21 @@ async fn watch_machines(ips: Vec<String>, timeout: i64) -> Result<Vec<MachineInf
 #[tauri::command]
 fn query_ip_records(ip: String, start: i64, end: i64) -> Result<Vec<MachineRecord>, String> {
     query_machine_records_by_time(ip, start, end)
+}
+
+#[tauri::command]
+async fn schedule_pool_record_update(url: String) -> Result<(), String> {
+    // clear handles before
+    let mut handles = HANDLES.lock().await;
+    for handle in handles.iter() {
+        handle.abort();
+    }
+    handles.clear();
+
+    let new_handle = start_pool_record_update_task(RUNTIME.handle().clone(), url);
+    handles.push(new_handle);
+
+    Ok(())
 }
 
 fn init_log(app_path: &str) {
@@ -100,14 +119,17 @@ fn main() {
                 fs::create_dir_all(&app_data_path).expect("failed to create directory");
             }
             init_log(app_data_path.to_str().unwrap());
-            init(&MinersLibConfig {
-                is_need_db: true,
-                app_path: app_data_path.to_str().unwrap().to_owned(),
-                feishu_app_id: "".to_owned(),
-                feishu_app_secret: "".to_owned(),
-                feishu_bot: "".to_owned(),
-                db_keep_days: 20,
-            });
+            init(
+                &MinersLibConfig {
+                    is_need_db: true,
+                    app_path: app_data_path.to_str().unwrap().to_owned(),
+                    feishu_app_id: "".to_owned(),
+                    feishu_app_secret: "".to_owned(),
+                    feishu_bot: "".to_owned(),
+                    db_keep_days: 20,
+                },
+                RUNTIME.handle().clone(),
+            );
 
             Ok(())
         })
@@ -117,6 +139,7 @@ fn main() {
             config_machines,
             watch_machines,
             query_ip_records,
+            schedule_pool_record_update,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
