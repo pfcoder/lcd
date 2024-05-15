@@ -82,6 +82,16 @@
               type="textarea"
             />
           </el-form-item>
+          <el-form-item :label="$t('f2pAccount')">
+            <el-input v-model="settingForm.f2pAccount" style="width: 300px" />
+          </el-form-item>
+          <el-form-item :label="$t('f2pSecret')">
+            <el-input v-model="settingForm.f2pSecret" style="width: 300px" />
+          </el-form-item>
+
+          <el-form-item :label="$t('proxy')">
+            <el-input v-model="settingForm.proxy" style="width: 300px" />
+          </el-form-item>
 
           <el-form-item :label="$t('language')">
             <el-select v-model="settingForm.language" :placeholder="$t('plsSelectLanguage')">
@@ -278,6 +288,9 @@ const CONFIG_REFRESH_KEY: string = 'lcd-refresh';
 const CONFIG_LANG_KEY: string = 'lcd-lang';
 const CONFIG_SCAN_TIMEOUT_KEY: string = 'lcd-scan-timeout';
 const CONFIG_WATCH_URL_KEY: string = 'lcd-watch-url';
+const CONFIG_F2POOL_ACCOUNT_KEY: string = 'lcd-f2pool-account';
+const CONFIG_F2POOL_SECRET_KEY: string = 'lcd-f2pool-secret';
+const CONFIG_PROXY_KEY: string = 'lcd-proxy';
 
 
 interface PoolConfig {
@@ -336,6 +349,9 @@ let settingForm = reactive({
   refreshInterval: localStorage.getItem(CONFIG_REFRESH_KEY) || "3",
   language: localStorage.getItem(CONFIG_LANG_KEY) || "zh",
   watcherUrl: "",
+  f2pAccount: "",
+  f2pSecret: "",
+  proxy: ""
 })
 
 const handleSelectionChange = (val: MachineInfo[]) => {
@@ -415,7 +431,25 @@ onMounted(() => {
   let watch_url = localStorage.getItem(CONFIG_WATCH_URL_KEY);
   if (watch_url !== null && watch_url.length > 0) {
     settingForm.watcherUrl = watch_url;
-    invoke("schedule_pool_record_update", { url: settingForm.watcherUrl })
+  }
+
+  let f2p_account = localStorage.getItem(CONFIG_F2POOL_ACCOUNT_KEY);
+  if (f2p_account !== null && f2p_account.length > 0) {
+    settingForm.f2pAccount = f2p_account;
+  }
+
+  let f2p_secret = localStorage.getItem(CONFIG_F2POOL_SECRET_KEY);
+  if (f2p_secret !== null && f2p_secret.length > 0) {
+    settingForm.f2pSecret = f2p_secret;
+  }
+
+  let proxy = localStorage.getItem(CONFIG_PROXY_KEY);
+  if (proxy !== null && proxy.length > 0) {
+    settingForm.proxy = proxy;
+  }
+
+  if ((settingForm.f2pAccount.length > 0 && settingForm.f2pSecret.length > 0) || settingForm.watcherUrl.length > 0) {
+    invoke("schedule_pool_record_update", {proxy: settingForm.proxy, url: settingForm.watcherUrl,  f2paccount: settingForm.f2pAccount, f2psecret: settingForm.f2pSecret })
   }
 });
 
@@ -687,7 +721,18 @@ async function onSettingsConfirm() {
 
   if (localStorage.getItem(CONFIG_WATCH_URL_KEY) !== settingForm.watcherUrl) {
     localStorage.setItem(CONFIG_WATCH_URL_KEY, settingForm.watcherUrl);
-    await invoke("schedule_pool_record_update", { url: settingForm.watcherUrl })
+  }
+
+  if (localStorage.getItem(CONFIG_F2POOL_ACCOUNT_KEY) !== settingForm.f2pAccount) {
+    localStorage.setItem(CONFIG_F2POOL_ACCOUNT_KEY, settingForm.f2pAccount);
+  }
+
+  if (localStorage.getItem(CONFIG_F2POOL_SECRET_KEY) !== settingForm.f2pSecret) {
+    localStorage.setItem(CONFIG_F2POOL_SECRET_KEY, settingForm.f2pSecret);
+  }
+
+  if ((settingForm.f2pAccount.length > 0 && settingForm.f2pSecret.length > 0) || settingForm.watcherUrl.length > 0) {
+    await invoke("schedule_pool_record_update", {proxy: settingForm.proxy, url: settingForm.watcherUrl,  f2paccount: settingForm.f2pAccount, f2psecret: settingForm.f2pSecret })
   }
 
   settingDrawer.value = false;

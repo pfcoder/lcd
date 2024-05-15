@@ -2232,7 +2232,7 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lcd"
-version = "1.0.1"
+version = "1.0.3"
 dependencies = [
  "lazy_static",
  "lcd-core",
@@ -2249,7 +2249,7 @@ dependencies = [
 [[package]]
 name = "lcd-core"
 version = "0.1.0"
-source = "git+https://github.com/pfcoder/lcd-core.git?branch=main#828bed5aee6ce82ce47f813fb84527a4343ba644"
+source = "git+https://github.com/pfcoder/lcd-core.git?branch=main#dd0bc0522dfa0060130c81ed83f8ce28142c3e2f"
 dependencies = [
  "chrono",
  "curl",

@@ -67,5 +67,8 @@ export default {
     accountPassword: 'Account Password',
     connectTimeoutSetting: 'Scan Timeout Setting',
     scanning: 'Scanning',
-    watcherUrl: 'Pool Watcher Url',
+    watcherUrl: 'Poolin Watcher Url',
+    f2pAccount: 'F2Pool Account',
+    f2pSecret: 'F2Pool Secret',
+    proxy: 'HTTP Proxy',
 }

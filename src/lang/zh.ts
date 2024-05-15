@@ -67,5 +67,8 @@ export default {
     accountPassword: '账户密码',
     connectTimeoutSetting: '扫描超时设置',
     scanning: '扫描中',
-    watcherUrl: '矿池观察者链接',
+    watcherUrl: '币印矿池观察者链接',
+    f2pAccount: 'F2Pool账户',
+    f2pSecret: 'F2Pool密钥',
+    proxy: 'HTTP代理',
 }

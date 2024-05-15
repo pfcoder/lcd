@@ -62,7 +62,12 @@ fn query_ip_records(ip: String, start: i64, end: i64) -> Result<Vec<MachineRecor
 }
 
 #[tauri::command]
-async fn schedule_pool_record_update(url: String) -> Result<(), String> {
+async fn schedule_pool_record_update(
+    proxy: String,
+    url: String,
+    f2paccount: String,
+    f2psecret: String,
+) -> Result<(), String> {
     // clear handles before
     let mut handles = HANDLES.lock().await;
     for handle in handles.iter() {
@@ -70,7 +75,8 @@ async fn schedule_pool_record_update(url: String) -> Result<(), String> {
     }
     handles.clear();
 
-    let new_handle = start_pool_record_update_task(RUNTIME.handle().clone(), url);
+    let new_handle =
+        start_pool_record_update_task(RUNTIME.handle().clone(), proxy, url, f2paccount, f2psecret);
     handles.push(new_handle);
 
     Ok(())
@@ -119,17 +125,14 @@ fn main() {
                 fs::create_dir_all(&app_data_path).expect("failed to create directory");
             }
             init_log(app_data_path.to_str().unwrap());
-            init(
-                &MinersLibConfig {
-                    is_need_db: true,
-                    app_path: app_data_path.to_str().unwrap().to_owned(),
-                    feishu_app_id: "".to_owned(),
-                    feishu_app_secret: "".to_owned(),
-                    feishu_bot: "".to_owned(),
-                    db_keep_days: 20,
-                },
-                RUNTIME.handle().clone(),
-            );
+            init(&MinersLibConfig {
+                is_need_db: true,
+                app_path: app_data_path.to_str().unwrap().to_owned(),
+                feishu_app_id: "".to_owned(),
+                feishu_app_secret: "".to_owned(),
+                feishu_bot: "".to_owned(),
+                db_keep_days: 20,
+            });
 
             Ok(())
         })

@@ -1,6 +1,6 @@
 [package]
 name = "lcd"
-version = "1.0.1"
+version = "1.0.3"
 description = "Liquid Tools @BTC"
 authors = ["codegene"]
 edition = "2021"
