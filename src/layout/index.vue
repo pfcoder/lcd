@@ -3,8 +3,8 @@
     <div class="layout-header" data-tauri-drag-region>
       <div class="logo">
         <!-- <img :src="Logo" class="logo-img" data-tauri-drag-region /> -->
-        <span class="app-name">Liquid Cooler Desktop</span>
-        <span class="ver">v1.0.3</span>
+        <span class="app-name">OMNI Liquid Tools</span>
+        <span class="ver">v1.0.4</span>
       </div>
       <div class="header-action">
         <div class="titlebar-button" id="titlebar-minimize">
